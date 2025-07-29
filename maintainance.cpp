@@ -7,7 +7,7 @@ using namespace std;
 
 class MaintenanceScheduler{
     private:
-        // Technician access code (6-digit)
+    
         string technician_code = "847392";
         
     public: 
@@ -44,13 +44,13 @@ class MaintenanceScheduler{
             total_trips++;
             cout << "Trip completed. Total trips: " << total_trips << "\n";
             
-            // Check if maintenance is needed based on trip count
+            
             if(total_trips >= max_trips){
                 cout << "MAINTENANCE REQUIRED: Trip limit reached (" << total_trips << "/" << max_trips << ")\n";
-                return 0; // Maintenance needed
+                return 0; 
             }
             
-            return 1; // Continue operation
+            return 1; 
         }
 
         // Verify technician access code
@@ -72,17 +72,16 @@ class MaintenanceScheduler{
 
         // Technician maintenance stop
         int technician_stop(){
-            // First verify technician credentials
+           
             if(!verify_technician_code()){
-                return 0; // Authentication failed
+                return 0; 
             }
             
             cout << "\nTechnician initiated maintenance stop.\n";
-            status = 0; // Set to maintenance mode
+            status = 0; 
             cout << "Elevator is now under maintenance.\n";
             cout << "Performing maintenance checks...\n";
             
-            // Show countdown during maintenance
             for(int i = 10; i > 0; i--){
                 cout << "Maintenance in progress... " << i << " seconds remaining\n";
                 this_thread::sleep_for(chrono::seconds(1));
@@ -94,19 +93,19 @@ class MaintenanceScheduler{
             
             cout << "Maintenance completed. Elevator ready for service.\n";
             cout << "All fault counters reset. System operational.\n";
-            status = 1; // Set back to active
+            status = 1;
             return 1;
         }
 
-        // Check if maintenance is needed
+       
         bool needs_maintenance(){
-            // Check fault count
+            
             if(fault_count >= max_faults){
                 cout << "MAINTENANCE REQUIRED: Too many faults (" << fault_count << "/" << max_faults << ")\n";
                 return true;
             }
             
-            // Check trip count
+            
             if(total_trips >= max_trips){
                 cout << "MAINTENANCE REQUIRED: Trip limit reached\n";
                 return true;
@@ -124,15 +123,14 @@ class MaintenanceScheduler{
             
             cout << "Moving from floor " << current_floor << " to floor " << dest_floor << "\n";
             
-            // Move floor by floor with 1 second delay
+           
             int i = 0;
             while(current_floor != dest_floor){
-                this_thread::sleep_for(chrono::seconds(1)); // 1 second delay
+                this_thread::sleep_for(chrono::seconds(1)); 
 
-                //Getting diff of current and dest floor
                 int diff = abs(current_floor - dest_floor);
                 
-                // Get the speed value from the speed arr (sensor input)
+                
                 int current_speed = speed_arr[i];
                 
                 if(current_floor < dest_floor){
@@ -146,32 +144,32 @@ class MaintenanceScheduler{
                 // Display status for each floor movement
                 display_status();
                 
-                // Track speed for this floor movement
+               
                 int speed_result = speed_tracker(current_speed);
                 
-                // Check if fault detected - if so, break the movement loop
+                
                 if(speed_result == 0){
                     cout << "\n*** FAULT DETECTED! ***\n";
                     cout << "Elevator movement stopped for safety evaluation.\n";
                     cout << "System entering emergency maintenance mode...\n";
-                    status = 0; // Put elevator in maintenance mode immediately
-                    return; // Exit the movement function immediately
+                    status = 0; 
+                    return;
                 }
                 
                 i++;
                 
-                // Safety check: if we've used all speed array values, reset index
+               
                 if(i >= 10) i = 0;
             }
             
             cout << "Arrived at floor " << current_floor << "\n";
             
-            // Track this trip
+          
             time_tracker();
             
-            // Check if maintenance is needed
+           
             if(needs_maintenance()){
-                status = 0; // Put elevator in maintenance mode
+                status = 0; 
             }
         }
 
@@ -181,12 +179,12 @@ class MaintenanceScheduler{
             cout << "This will immediately stop the elevator system.\n";
             
             if(!verify_technician_code()){
-                return false; // Authentication failed
+                return false; 
             }
             
             cout << "\n✓ Emergency shutdown authorized by technician.\n";
             cout << "System shutting down safely...\n";
-            status = 0; // Set to maintenance mode for safety
+            status = 0; 
             return true;
         }
         void display_status(){
@@ -208,7 +206,7 @@ int main(){
     
     while(true){
         car.display_status();
-        this_thread::sleep_for(chrono::seconds(1)); // Sleep for 1 second
+        this_thread::sleep_for(chrono::seconds(1)); 
         
         if(car.status == 0){
             cout << "The elevator is under maintenance." << endl;
